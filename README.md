@@ -1,11 +1,10 @@
-Here?s the revised `README.md` structure with `build-image.sh` included under both **Project Structure** and **Build & Run Scripts** sections:
 
 ---
 
 ```markdown
-# ? Jupyter + Spark + MLflow Containerized Environment
+# Jupyter + Spark + MLflow Containerized Environment
 
-## ? What is This?
+## What is This?
 
 A fully containerized development environment for running Jupyter notebooks with built-in support for:
 - Apache Spark + Delta Lake
@@ -16,20 +15,20 @@ Includes helper scripts for easy image building, container launching, and termin
 
 ---
 
-## ? Quick Start
+## Quick Start
 
 ```bash
 ./run-notebook.sh
 ```
 
 Access:
-- ? Jupyter Notebook ? [http://localhost:8888](http://localhost:8888)
-- ? MLflow UI ? [http://localhost:5000](http://localhost:5000)
-- ? Spark UI ? [http://localhost:4040](http://localhost:4040)
+- Jupyter Notebook ? [http://localhost:8888](http://localhost:8888)
+- MLflow UI ? [http://localhost:5000](http://localhost:5000)
+- Spark UI ? [http://localhost:4040](http://localhost:4040)
 
 ---
 
-## ? Project Structure
+## Project Structure
 
 | File                  | Purpose                                               |
 |-----------------------|-------------------------------------------------------|
@@ -42,9 +41,9 @@ Access:
 
 ---
 
-## ? Build & Run Scripts
+## Build & Run Scripts
 
-### ? `build-image.sh`
+### `build-image.sh`
 - Builds the Docker image separately from the runtime logic
 - Allows custom `--image-name`, `--python-version`, `--tag`, etc.
 
@@ -54,7 +53,7 @@ Access:
 
 ---
 
-### ? `run-notebook.sh`
+### `run-notebook.sh`
 - Builds (if not already built) and starts the container
 - Mounts local volume and maps ports for Jupyter, MLflow, and Spark UI
 - Accepts overrides for port, volume path, image name, etc.
@@ -65,7 +64,7 @@ Access:
 
 ---
 
-### ? `docker-terminal.sh`
+### `docker-terminal.sh`
 - Opens a terminal session inside the running container.
 
 ```bash
@@ -74,14 +73,14 @@ Access:
 
 ---
 
-## ?? Configuration & Environment
+## Configuration & Environment
 
 - Uses `.env` to inject environment variables into the container
 - Sensitive keys or tokens should be stored here (excluded via `.gitignore`)
 
 ---
 
-## ? What's Inside
+## What's Inside
 
 - ML Libraries: `mlflow`, `pyspark`, `delta-spark`, `tensorflow`, `torch`, `scikit-learn`, `xgboost`, `lightgbm`
 - Data tools: `pandas`, `numpy`, `matplotlib`, `seaborn`, `pandas-ta`
@@ -89,7 +88,7 @@ Access:
 
 ---
 
-## ? Volumes & Ports
+## Volumes & Ports
 
 | Feature            | Path/Port                       |
 |--------------------|----------------------------------|
@@ -101,7 +100,7 @@ Access:
 
 ---
 
-## ? Ideal For
+## Ideal For
 
 - End-to-end ML experimentation with tracking
 - Delta Lake + Spark pipelines
@@ -110,7 +109,7 @@ Access:
 
 ---
 
-## ? Contributing
+## Contributing
 
 Suggestions and pull requests are welcome! Fork it, tweak it, and let us know how it can be improved.
 
