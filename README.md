@@ -1,4 +1,8 @@
 
+# Purpose
+
+This environment was created to support the learnings and practical exercises involved in preparing for the Databricks Machine Learning Professional Certification. It provides a pre-configured workspace with the tools and libraries commonly used in the Databricks ecosystem, enabling hands-on experimentation with MLflow, Spark, Delta Lake, and key machine learning frameworks.
+
 ---
 
 # Jupyter + Spark + MLflow Containerized Environment
