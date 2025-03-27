@@ -1,7 +1,6 @@
 
 ---
 
-```markdown
 # Jupyter + Spark + MLflow Containerized Environment
 
 ## What is This?
@@ -45,10 +44,9 @@ Access:
 
 ### `build-image.sh`
 - Builds the Docker image separately from the runtime logic
-- Allows custom `--image-name`, `--python-version`, `--tag`, etc.
 
 ```bash
-./build-image.sh --image-name mylab --python-version 3.10-slim --image-tag dev
+./build-image.sh
 ```
 
 ---
@@ -59,7 +57,7 @@ Access:
 - Accepts overrides for port, volume path, image name, etc.
 
 ```bash
-./run-notebook.sh --port 9999 --volume /my/notebooks
+./run-notebook.sh
 ```
 
 ---
