@@ -19,7 +19,9 @@ ENV MLFLOW_SPARK_VERSION=2.0.1
 USER root
 
 # Install Java (required for Spark) & SQLite
-RUN apt-get update && apt-get install -y sqlite3 openjdk-11-jdk curl && apt-get clean
+RUN apt-get update && apt-get install -y sqlite3 openjdk-11-jdk curl sudo && apt-get clean
+
+RUN echo "jovyan ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/jovyan && chmod 0440 /etc/sudoers.d/jovyan
 
 
 # Ensure necessary directories exist and have correct permissions
@@ -46,8 +48,7 @@ RUN curl -fSL --retry 3 --retry-delay 5 \
         -o /opt/spark/jars/mlflow-spark-${MLFLOW_SPARK_VERSION}.jar
     
 
-# Change ownership back to Jupyter user
-RUN chown -R jovyan:users $SPARK_HOME /opt/spark/jars /home/jovyan/mlruns
+
 
 # Copy the .env file into the working directory
 COPY .env /home/jovyan/work/.env
@@ -55,6 +56,14 @@ RUN chmod 644 /home/jovyan/work/.env
 
 # Install additional dependencies
 RUN pip install --no-cache-dir python-dotenv
+
+COPY start.sh /start.sh
+COPY spark-defaults.conf /opt/spark/conf/spark-defaults.conf
+RUN chmod +x /start.sh
+RUN chown jovyan:users /opt/spark/conf/spark-defaults.conf 
+
+# Change ownership back to Jupyter user
+RUN chown -R jovyan:users $SPARK_HOME /opt/spark/jars /opt/spark/conf /home/jovyan/mlruns
 
 # Switch back to jovyan user
 USER jovyan
@@ -100,7 +109,6 @@ ENV PYSPARK_SUBMIT_ARGS="--jars /opt/spark/jars/delta-spark_${SCALA_VERSION}-${D
 EXPOSE 8888 4040 8080 7077 5000
 
 # Start MLflow server on container startup (accessible externally)
-CMD sh -c "mlflow server --host 0.0.0.0 --port 5000 \
-                --backend-store-uri sqlite:///mlflow.db \
-                --default-artifact-root /mlflow/artifacts & \
-           start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''"
+
+ENTRYPOINT ["/start.sh"]
+

@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  jupyter:
+    image: jupyter-notebook:latest
+    container_name: jupyter_container
+    build:
+      context: .
+      args:
+        PYTHON_VERSION: "3.9-slim"
+    ports:
+      - "8888:8888"    # Jupyter Notebook
+      - "5001:5000"    # MLflow UI (host:container)
+      - "7077:7077"   # Spark Master Comm
+      - "8080:8080"   # Spark Master Web UI
+      - "4040:4040"   # Spark Application UI
+    volumes:
+      - /opt/jupyter:/home/jovyan/work
+      - /opt/mlflow:/mlflow
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+      - PYSPARK_SUBMIT_ARGS=--jars /opt/spark/jars/delta-spark_2.12-3.1.0.jar,/opt/spark/jars/delta-storage-3.1.0.jar pyspark-shell
+      - SPARK_ROLE=master
+      - SPARK_DRIVER_HOST=10.8.0.1  # Example OpenVPN IP
+    command: ["/start.sh"]
+    restart: unless-stopped
