@@ -19,7 +19,7 @@ ENV MLFLOW_SPARK_VERSION=2.0.1
 USER root
 
 # Install Java (required for Spark) & SQLite
-RUN apt-get update && apt-get install -y sqlite3 openjdk-11-jdk curl sudo && apt-get clean
+RUN apt-get update && apt-get install -y sqlite3 openjdk-11-jdk curl sudo rsync && apt-get clean
 
 RUN echo "jovyan ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/jovyan && chmod 0440 /etc/sudoers.d/jovyan
 
