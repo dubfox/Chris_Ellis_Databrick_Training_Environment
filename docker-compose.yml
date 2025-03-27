@@ -1,20 +1,12 @@
-version: '3.8'
-
-x-common-env: &common-env
-  MLFLOW_TRACKING_URI: sqlite:///mlflow.db
-  PYSPARK_SUBMIT_ARGS: >-
-    --jars /opt/spark/jars/delta-spark_2.12-3.1.0.jar,/opt/spark/jars/delta-storage-3.1.0.jar
-    pyspark-shell
-
 services:
   master:
-    profiles: ["master"]
     image: jupyter-notebook:latest
     container_name: spark_master
     build:
       context: .
       args:
         PYTHON_VERSION: "3.9-slim"
+    profiles: ["master"]
     ports:
       - "8888:8888"    # Jupyter Notebook
       - "5001:5000"    # MLflow UI
@@ -25,28 +17,23 @@ services:
       - /opt/jupyter:/home/jovyan/work
       - /opt/mlflow:/mlflow
     environment:
-      <<: *common-env
-      SPARK_ROLE: master
-      SPARK_DRIVER_HOST: 10.8.0.1  # Replace with actual OpenVPN IP of master
+      - SPARK_ROLE=master
+      - SPARK_DRIVER_HOST=10.8.1.13  # Or local IP for OpenVPN
+      - MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+      - PYSPARK_SUBMIT_ARGS=--jars /opt/spark/jars/delta-spark_2.12-3.1.0.jar,/opt/spark/jars/delta-storage-3.1.0.jar pyspark-shell
     command: ["/start.sh"]
     restart: unless-stopped
 
   worker:
-    profiles: ["worker"]
     image: jupyter-notebook:latest
     container_name: spark_worker
-    build:
-      context: .
-      args:
-        PYTHON_VERSION: "3.9-slim"
+    profiles: ["worker"]
     depends_on:
       - master
     volumes:
       - /opt/jupyter:/home/jovyan/work
-      - /opt/mlflow:/mlflow
     environment:
-      <<: *common-env
-      SPARK_ROLE: worker
-      SPARK_MASTER: spark://master:7077
+      - SPARK_ROLE=worker
+      - SPARK_MASTER=spark://spark_master:7077
     command: ["/start.sh"]
     restart: unless-stopped
